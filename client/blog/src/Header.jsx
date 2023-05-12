@@ -1,18 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "./UserContext";
 
 const Header = () => {
-  const [username,setUserName] = useState(null)
+  // const [username,setUserName] = useState(null)
+  const {userInfo,setUserInfo} = useContext(UserContext)
+
+
   useEffect(() => {
     fetch("http://localhost:5000/profile", {
       credentials:"include"
     }).then((res) => {
       res.json().then((user) => {
-        setUserName(user.username);
         
+        setUserInfo(user)
       })
     });
+    
+
   }, []);
+
 
  async function logout() {
    const response = await fetch('http://localhost:5000/logout', {
@@ -20,7 +27,7 @@ const Header = () => {
       method: 'POST',
     });
 
-    setUserName(null);
+    setUserInfo(null)
   }
 
   return (
@@ -29,18 +36,18 @@ const Header = () => {
         Blog
       </Link>
       <nav>
-      {username && (
+      {userInfo?.username && (
           <>
-            <Link to="/create">Create new post {username.toUpperCase()} </Link>
-            <a onClick={logout} style={{cursor:"pointer"}}>Logout</a>
+            <Link to="/create" className="linknewpost">Create new post  </Link>
+            <a onClick={logout} style={{cursor:"pointer"}}className="linknewpost" >Logout</a>
           </>
         )}
-        {!username && (
+        {!userInfo?.username && (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
+            <Link to="/login" className="loginlink">Login</Link>
+            {/* <Link to="/register" className="registerlink">Register</Link> */}
           </>
-        )}
+        )} 
       </nav>
     </header>
   );

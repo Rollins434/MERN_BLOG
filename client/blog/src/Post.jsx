@@ -1,27 +1,31 @@
 import React from 'react'
+import {formatISO9075} from "date-fns"
+import { Link } from 'react-router-dom'
 
-const Post = () => {
-    const timeElapsed = Date.now();
-    const today = new Date(timeElapsed);
+const Post = ({data}) => {
+  
   return (
     <div className="post">
         <div className="image"> 
+        <Link to={`post/${data._id}`}>
         <img
-          src="https://images.unsplash.com/photo-1679588062232-e8eb7d31f3bf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80"
-          alt="plant"
+          src={`http://localhost:5000/${data?.cover}`}
+         
           className="img"
-        /></div>
+        />
+          </Link>
+        </div>
        
      
         <div className="text">
-          <h2>this is a plant</h2>
-
-          <span>{today.toDateString()}</span>
+          <Link to={`post/${data._id}`}>
+          <h2>{data?.title}</h2>
+          </Link>
+          <a>{data?.author?.username}</a>
+<span>{formatISO9075(new Date(data?.createdAt))}</span>
+        
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-            voluptatum qui pariatur, cum, vero corporis ullam ab asperiores
-            quasi cupiditate repellendus velit adipisci labore voluptates
-            distinctio sint saepe amet porro?
+           {data?.summary}
           </p>
         </div>
       </div>
